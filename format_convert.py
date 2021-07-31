@@ -1,9 +1,13 @@
-import date_compare
 import os
 import subprocess
 import glob
 
-import date_compare
+from iphone_pic_backup import date_compare
+
+
+# dir path where this script is stored
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+# https://stackoverflow.com/questions/29768937/return-the-file-path-of-the-file-not-the-current-directory
 
 
 def convert_webp(webp_path, delete_webp=False):
@@ -30,7 +34,7 @@ def convert_webp(webp_path, delete_webp=False):
         return None
 
     print("Attempting to convert %s" % webp_name)
-    CompProc = subprocess.run(["./convert_webp", webp_path],
+    CompProc = subprocess.run(["%s/convert_webp" % SCRIPT_DIR, webp_path],
                         stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     # bash output suppressed. No prompts in convert_webp.
     # converts file and puts output in original file's directory
@@ -56,15 +60,16 @@ def convert_webp(webp_path, delete_webp=False):
 
 
 def write_exif_comment(file_path, comment):
-    """Wrapper for bash script write_exif_comment."""
-    CompProc = subprocess.run(["./write_exif_comment", file_path, comment],
+    """Wrapper for bash script write_exif_comment.
+    Does not check for existence of a comment first."""
+    CompProc = subprocess.run(["%s/write_exif_comment" % SCRIPT_DIR, file_path, str(comment)],
                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     if CompProc.returncode != 0:
         raise Exception("Call to write_exif_comment failed.")
 
 
 def transfer_exif_comment(from_path, to_path):
-    # Transcribe any comment/caption in original GIF.
+    # Transcribe any comment/caption found in original file.
     img_comment = date_compare.get_comment(from_path)
     if img_comment:
         print("Transferring EXIF comment '%s'" % img_comment)
@@ -75,7 +80,7 @@ def convert_gif_to_mp4(gif_path):
     """Wrapper for bash script trim_to_mp4 that also displays file sizes."""
 
     dir_name = os.path.dirname(gif_path)
-    CompProc = subprocess.run(["./trim_to_mp4", gif_path],
+    CompProc = subprocess.run(["%s/trim_to_mp4" % SCRIPT_DIR, gif_path],
                                                     stderr=subprocess.STDOUT)
     # bash prompts passed to user - no stdout= param passed to subprocess.run() call.
 
@@ -125,11 +130,11 @@ def convert_all_webx(dir_name, webx_type, delete_webx=False):
             else:
                 print("Converting: %s" % file)
                 if webx_type == "webp":
-                    CompProc = subprocess.run(["./convert_webp", og_path],
+                    CompProc = subprocess.run(["%s/convert_webp" % SCRIPT_DIR, og_path],
                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
                     # bash output suppressed. No prompts in convert_webp.
-                if webx_type == "webm":
-                    CompProc = subprocess.run(["./trim_to_mp4", gif_path],
+                elif webx_type == "webm":
+                    CompProc = subprocess.run(["%s/trim_to_mp4" % SCRIPT_DIR, gif_path],
                                                     stderr=subprocess.STDOUT)
                     # bash prompts passed to user - no stdout= param passed to subprocess.run() call.
 

@@ -4,16 +4,16 @@ except ImportError:
     from distutils.core import setup
 
 config = {
-    'description': 'iPhone picture export/backup - not finished',
+    'description': 'Various tools for image and video manipulation',
     'author': 'Jonathan Bowen',
-    'url': 'github.com/jbowen102/iphone_pic_backup',
-    'download_url': 'github.com/jbowen102/iphone_pic_backup.git',
-    'author_email': 'jbowen@posteo.net',
-    'version': '0.1',
-    'install_requires': ['nose'],
-    'packages': ['NAME'],
-    'scripts': ['iphone_pic_bu.py'],
-    'name': 'iphone_pic_backup'
+    'url': 'github.com/jbowen102/mediadapt',
+    'download_url': 'github.com/jbowen102/mediadapt.git',
+    'author_email': 'ew15dro6k216@opayq.net',
+    'version': '',
+    'install_requires': ['iphone_pic_backup'],
+    'packages': [''],
+    'scripts': [''],
+    'name': 'mediadapt'
 }
 
 setup(**config)
