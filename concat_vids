@@ -71,11 +71,12 @@ fi
 for VAR in "$@"
 do
   FILENAME="$(basename "${VAR}")"
-  echo "file ${FILENAME}" >> "${LIST_FILE}"
+  echo "file '""${FILENAME}""'" >> "${LIST_FILE}"
 done
 
 printf "\nAttempting to concatenate videos..."
-ffmpeg -f concat -safe 0 -i "${LIST_FILE}" -c copy "${OUTPUT_FILEPATH}"
+ffmpeg -f concat -safe 0 -i "${LIST_FILE}" -c copy "${OUTPUT_FILEPATH}" &> /dev/null
+# https://stackoverflow.com/a/11175851
 
 CONCAT_RETURN=$?
 if [[ ${CONCAT_RETURN} == 0 ]];
