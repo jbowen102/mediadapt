@@ -99,7 +99,7 @@ def convert_gif_to_mp4(gif_path):
 
 
 # Call bash convert script
-def convert_all_webx(dir_name, webx_type, delete_webx=False):
+def convert_all_webx(dir_name, webx_type=None, delete_webx=False):
     """Use bash scripts convert_webp or trim_to_mp4 to convert either webp or
     webm files in a directory.
     *.webp (animated) ->  *.gif
@@ -113,9 +113,20 @@ def convert_all_webx(dir_name, webx_type, delete_webx=False):
     output_accum_size = 0
 
     file_list = os.listdir(dir_name)
+    if not webx_type:
+        # convert both types
+        webx_ext = [".webp", ".webm"]
+    elif webx_type.lower() == "webp":
+        webx_ext = [".webp"]
+    elif webx_type.lower() == "webm":
+        webx_ext = [".webm"]
+    else:
+        raise Exception("Unrecognized webx type. Recognized types: webp, webm")
+
     for file in file_list:
         og_path = os.path.join(dir_name, file)
-        if os.path.splitext(file)[1].lower() == ".%s" % webx_type:
+        file_ext = os.path.splitext(file)[1].lower()
+        if file_ext in webx_ext:
             # Check for existing converted file
             file_no_ext = os.path.splitext(file)[0]
             wildcard_filename = file_no_ext + "." + "*"
@@ -125,22 +136,22 @@ def convert_all_webx(dir_name, webx_type, delete_webx=False):
             # can't prompt user when its output is suppressed.
             matches = glob.glob(os.path.join(dir_name, wildcard_filename))
             if len(matches) > 1:
-                print("Skipped: %s (File with same name and different "
+                print("Skipping: %s (File with same name and different "
                                                 "extension exists here)" % file)
             else:
                 print("Converting: %s" % file)
-                if webx_type == "webp":
+                if file_ext == ".webp":
                     CompProc = subprocess.run(["%s/convert_webp" % SCRIPT_DIR, og_path],
                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
                     # bash output suppressed. No prompts in convert_webp.
-                elif webx_type == "webm":
-                    CompProc = subprocess.run(["%s/trim_to_mp4" % SCRIPT_DIR, gif_path],
+                elif file_ext == ".webm":
+                    CompProc = subprocess.run(["%s/trim_to_mp4" % SCRIPT_DIR, og_path],
                                                     stderr=subprocess.STDOUT)
                     # bash prompts passed to user - no stdout= param passed to subprocess.run() call.
 
                 # Check for success
                 if CompProc.returncode == 0:
-                    if webx_type == "webp":
+                    if file_ext == ".webp":
                         # Find matches again now that there are two
                         # Can't do this above because set.pop() will fail if conversion failed.
                         matches = glob.glob(os.path.join(dir_name, wildcard_filename))
@@ -148,7 +159,7 @@ def convert_all_webx(dir_name, webx_type, delete_webx=False):
                         # https://stackoverflow.com/a/21502564
                         converted_filepath = ( set(matches) - set([og_path]) ).pop()
 
-                    elif webx_type == "webm":
+                    elif file_ext == ".webm":
                         converted_filepath = os.path.join(dir_name, file_no_ext + ".mp4")
 
                     webx_size = os.path.getsize(og_path)
@@ -171,7 +182,7 @@ def convert_all_webx(dir_name, webx_type, delete_webx=False):
                 (humanbytes(webx_accum_size), humanbytes(output_accum_size),
                                             output_accum_size/webx_accum_size))
     else:
-        print("\nNo %s files found to convert in %s" % (webx_type, dir_name))
+        print("\nNo %s files found to convert in %s" % (", ".join(webx_ext), dir_name))
 
 
 # humanbytes() copied from here (slight formatting modification by me):
