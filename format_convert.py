@@ -2,7 +2,7 @@ import os
 import subprocess
 import glob
 
-from iphone_pic_backup import date_compare
+from idevice_media_offload import date_compare
 
 
 # dir path where this script is stored

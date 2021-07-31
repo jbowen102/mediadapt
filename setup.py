@@ -10,7 +10,7 @@ config = {
     'download_url': 'github.com/jbowen102/mediadapt.git',
     'author_email': 'ew15dro6k216@opayq.net',
     'version': '',
-    'install_requires': ['iphone_pic_backup'],
+    'install_requires': ['idevice_media_offload'],
     'packages': [''],
     'scripts': [''],
     'name': 'mediadapt'
