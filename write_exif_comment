@@ -19,7 +19,7 @@ else
   exit 1
 fi
 
-
+# Does not check for existence of a comment first
 printf "\nAttempting to write EXIF comment..."
 exiftool -Comment="${COMMENT}" "${FILE_PATH}" &> /dev/null
 EXIF_RETURN=$?

@@ -53,7 +53,7 @@ fi
 # Check for both resolvable path and broken symlink # https://unix.stackexchange.com/a/550837
 if [[ -e "${FILEPATH_OUT}" ]] || [[ -h "${FILEPATH_OUT}" ]];
 then
-  printf "\nTarget file $(basename ${FILEPATH_OUT}) exists. Overwrite? [Y/N]\n"
+  printf "\nTarget file $(basename "${FILEPATH_OUT}") exists. Overwrite? [Y/N]\n"
   read -p ">" answer
   if [ "${answer}" == "y" -o "${answer}" == "Y" ];
   then
@@ -96,11 +96,12 @@ then
       rm "${INTER_GIF_PATH}"
     fi
 
-    "${SCRIPT_DIR}"/convert_vid_to_gif "${TEMP_PATH}"
+    printf "\nAttempting to convert/trim to gif format..."
+    "${SCRIPT_DIR}"/convert_vid_to_gif "${TEMP_PATH}" &> /dev/null
     GIF_CONVERT_RETURN=$? # gets return value of last command executed.
     if [ ${GIF_CONVERT_RETURN} == 0 ];
     then
-      printf "\nAttempting to create patrol-cycle gif..."
+      printf "SUCCESS\nAttempting to create patrol-cycle gif..."
 
       convert "${INTER_GIF_PATH}" -coalesce -duplicate 1,-2-1 -quiet \
       -layers OptimizePlus -loop 0 "${FILEPATH_OUT}" &> /dev/null
@@ -118,17 +119,18 @@ then
   # If not already a gif, convert to gif first. Case-insensitive comparison:
   if [[ "${EXT,,}" == "${NEW_EXT,,}" ]]; # https://stackoverflow.com/a/27679748
   then
-    INTER_GIF_PATH="${TEMP_PATH_NO_EXT}_${2}s-.gif"
+    INTER_GIF_PATH="${TEMP_PATH_NOEXT}_${2}s-.gif"
     if [[ -e "${INTER_GIF_PATH}" ]];
     then
       rm "${INTER_GIF_PATH}"
     fi
 
-    "${SCRIPT_DIR}"/trim_only "${FILE_PATH}" ${2}
+    printf "\nAttempting to trim..."
+    "${SCRIPT_DIR}"/trim_only "${TEMP_PATH}" ${2} &> /dev/null
     TRIM_RETURN=$? # gets return value of last command executed.
     if [ ${TRIM_RETURN} == 0 ];
     then
-      printf "\nAttempting to create patrol-cycle gif..."
+      printf "SUCCESS\nAttempting to create patrol-cycle gif..."
 
       convert "${INTER_GIF_PATH}" -coalesce -duplicate 1,-2-1 -quiet \
       -layers OptimizePlus -loop 0 "${FILEPATH_OUT}" &> /dev/null
@@ -144,11 +146,12 @@ then
       rm "${INTER_GIF_PATH}"
     fi
 
-    "${SCRIPT_DIR}"/convert_vid_to_gif "${TEMP_PATH}" ${2} # trim and convert to gif at once
+    printf "\nAttempting to convert/trim to gif format..."
+    "${SCRIPT_DIR}"/convert_vid_to_gif "${TEMP_PATH}" ${2} &> /dev/null
     GIF_CONVERT_RETURN=$? # gets return value of last command executed.
     if [ ${GIF_CONVERT_RETURN} == 0 ];
     then
-      printf "\nAttempting to create patrol-cycle gif..."
+      printf "SUCCESS\nAttempting to create patrol-cycle gif..."
 
       convert "${INTER_GIF_PATH}" -coalesce -duplicate 1,-2-1 -quiet \
       -layers OptimizePlus -loop 0 "${FILEPATH_OUT}" &> /dev/null
@@ -169,11 +172,12 @@ then
       rm "${INTER_GIF_PATH}"
     fi
 
-    "${SCRIPT_DIR}"/trim_only "${TEMP_PATH}" ${2} ${3}
+    printf "\nAttempting to trim..."
+    "${SCRIPT_DIR}"/trim_only "${TEMP_PATH}" ${2} ${3} &> /dev/null
     TRIM_RETURN=$? # gets return value of last command executed.
     if [ ${TRIM_RETURN} == 0 ];
     then
-      printf "\nAttempting to create patrol-cycle gif..."
+      printf "SUCCESS\nAttempting to create patrol-cycle gif..."
 
       convert "${INTER_GIF_PATH}" -coalesce -duplicate 1,-2-1 -quiet \
       -layers OptimizePlus -loop 0 "${FILEPATH_OUT}" &> /dev/null
@@ -189,11 +193,13 @@ then
       rm "${INTER_GIF_PATH}"
     fi
 
-    "${SCRIPT_DIR}"/convert_vid_to_gif "${TEMP_PATH}" ${2} ${3} # trim and convert to gif at once
+    # trim and convert to gif at once
+    printf "\nAttempting to convert/trim to gif format..."
+    "${SCRIPT_DIR}"/convert_vid_to_gif "${TEMP_PATH}" ${2} ${3} &> /dev/null
     GIF_CONVERT_RETURN=$? # gets return value of last command executed.
     if [ ${GIF_CONVERT_RETURN} == 0 ];
     then
-      printf "\nAttempting to create patrol-cycle gif..."
+      printf "SUCCESS\nAttempting to create patrol-cycle gif..."
 
       convert "${INTER_GIF_PATH}" -coalesce -duplicate 1,-2-1 -quiet \
       -layers OptimizePlus -loop 0 "${FILEPATH_OUT}" &> /dev/null
@@ -210,7 +216,7 @@ PATROL_CYC_RETURN=$? # gets return value of last command executed.
 if [ ${PATROL_CYC_RETURN} == 0 ]
 then
   # transcribe EXIF comment, if present
-  "${SCRIPT_DIR}"/transfer_exif_comment "${FILE_PATH}" "${FILEPATH_OUT}"
+  "${SCRIPT_DIR}"/transfer_exif_comment "${FILE_PATH}" "${FILEPATH_OUT}" &> /dev/null
   COMMENT_RETURN=$? # gets return value of last command executed.
   if [ ${COMMENT_RETURN} == 0 ];
   then
