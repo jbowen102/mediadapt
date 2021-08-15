@@ -5,6 +5,14 @@
 source "$(realpath "$(dirname "${0}")")/dir_names.sh" # brings in WEBP2GIF_DIR
 # https://stackoverflow.com/questions/59895/how-can-i-get-the-source-directory-of-a-bash-script-from-within-the-script-itsel
 
+if [[ -e "${1}" ]];
+then
+  :
+else
+  printf "\nInput file ${1} cannot be found.\n"
+  exit 1
+fi
+
 STARTING_DIR="${PWD}"
 FILE_PATH="$(realpath "${1}")"
 # https://code-maven.com/bash-absolute-path
