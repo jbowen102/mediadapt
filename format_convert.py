@@ -10,6 +10,43 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 # https://stackoverflow.com/questions/29768937/return-the-file-path-of-the-file-not-the-current-directory
 
 
+def convert_heif(heif_path, delete_heif=False):
+    """Use heif-convert bash tool to convert heif file to jpg."""
+    heif_name = os.path.basename(heif_path)
+    file_ext = os.path.splitext(heif_path)[-1]
+    file_no_ext = os.path.splitext(heif_name)[0]
+
+    if file_ext.upper() != ".HEIC":
+        raise Exception("convert_heif() only accepts HEIC files.")
+
+    # Can't let bash tool handle collisions because it can't prompt user when
+    # its output is suppressed.
+    for ext_style in [".jpg", ".JPG", ".JPEG"]:
+        converted_filename = file_no_ext + ext_style
+        converted_path = os.path.join(os.path.dirname(heif_path), converted_filename)
+        if os.path.exists(converted_path):
+            print("Can't convert %s (JPG version already exists here)" % heif_name)
+            return None
+
+    converted_filepath = os.path.splitext(heif_path)[0] + ".jpg"
+    print("Attempting to convert %s" % heif_name)
+    CompProc = subprocess.run(["heif-convert", heif_path, converted_filepath],
+                               stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    # bash output suppressed. No prompts in convert_heif.
+    # converts file and puts output in original file's directory
+
+    # Check for success
+    if CompProc.returncode == 0:
+        print("\tSUCCESSFUL CONVERSION: %s -> %s"
+                            % (heif_name, os.path.basename(converted_filepath)))
+        transfer_exif_comment(heif_path, converted_filepath)
+        if delete_heif:
+            os.remove(heif_path)
+        return converted_filepath
+    else:
+        print("\tFAILED TO CONVERT %s " % heif_name)
+        return None
+
 def convert_webp(webp_path, delete_webp=False):
     """Use bash script convert_webp to convert webp to jpg or gif.
     delete_webp parameter determines if webp file gets deleted after conversion.
