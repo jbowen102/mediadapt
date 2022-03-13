@@ -3,6 +3,7 @@ import subprocess
 import glob
 
 from idevice_media_offload import date_compare
+from idevice_media_offload import pic_categorize_tool
 
 
 # dir path where this script is stored
@@ -106,11 +107,29 @@ def write_exif_comment(file_path, comment):
 
 
 def transfer_exif_comment(from_path, to_path):
-    # Transcribe any comment/caption found in original file.
+    """Transcribe any comment/caption found in original file.
+    """
     img_comment = date_compare.get_comment(from_path)
     if img_comment:
         print("Transferring EXIF comment '%s'" % img_comment)
         write_exif_comment(to_path, img_comment)
+
+
+def open_img_source(file_path):
+    """Extract and open source URL from pic metadata if one stored there.
+    """
+    img_comment = date_compare.get_comment(file_path)
+
+    if not img_comment:
+        print("No EXIF comment found.\n")
+    elif "http" in img_comment.lower():
+        # Isolate URL. Replace commas w/ spaces then split comment by spaces.
+        img_src_url = [word for word in img_comment.replace(",", " ").split(" ")
+                                                        if "http" in word][0]
+        # Open URL in browser
+        pic_categorize_tool.os_open(img_src_url)
+    else:
+        print("No URL found in EXIF comment:\n\t%s" % img_comment)
 
 
 def convert_gif_to_mp4(gif_path):
