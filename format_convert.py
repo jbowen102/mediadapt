@@ -2,8 +2,8 @@ import os
 import subprocess
 import glob
 
-from idevice_media_offload import date_compare
-from idevice_media_offload import pic_categorize_tool
+#from idevice_media_offload import date_compare
+#from idevice_media_offload import pic_categorize_tool
 
 
 # dir path where this script is stored
@@ -40,7 +40,7 @@ def convert_heif(heif_path, delete_heif=False):
     if CompProc.returncode == 0:
         print("\tSUCCESSFUL CONVERSION: %s -> %s"
                             % (heif_name, os.path.basename(converted_filepath)))
-        transfer_exif_comment(heif_path, converted_filepath)
+        # transfer_exif_comment(heif_path, converted_filepath)
         if delete_heif:
             os.remove(heif_path)
         return converted_filepath
