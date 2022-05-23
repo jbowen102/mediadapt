@@ -71,14 +71,14 @@ fi
 FFMPEG_RETURN=$? # gets return value of last command executed.
 if [ ${FFMPEG_RETURN} == 0 ]; then
   # transcribe EXIF comment, if present
-  "${SCRIPT_DIR}"/transfer_exif_comment "${FILE_PATH}" "${FILEPATH_OUT}" &> /dev/null
-  COMMENT_RETURN=$? # gets return value of last command executed.
-  if [ ${COMMENT_RETURN} == 0 ]; then
+  #"${SCRIPT_DIR}"/transfer_exif_comment "${FILE_PATH}" "${FILEPATH_OUT}" &> /dev/null
+  #COMMENT_RETURN=$? # gets return value of last command executed.
+  #if [ ${COMMENT_RETURN} == 0 ]; then
     printf "SUCCESS\n"
-  else
-    printf "FAIL\nEXIF-comment transfer unsuccessful.\n"
-    exit 1
-  fi
+  #else
+  #  printf "FAIL\nEXIF-comment transfer unsuccessful.\n"
+  #  exit 1
+  #fi
 else
   printf "FAIL\n"
   exit 1
