@@ -4,7 +4,9 @@
 # pass img source URL as second arg
 
 # pull in bash aliases
-source "$(realpath ~/.bash_aliases)"
+SCRIPT_DIR="$(realpath "$(dirname "${0}")")"
+FILE_PATH="$(realpath "${1}")"
+# https://code-maven.com/bash-absolute-path
 
 if [[ $# -ne 2 ]]; then
 	echo "Need to pass in two arguments: img path and img source URL to embed." >&2
@@ -31,7 +33,9 @@ WEBP_EXT="WEBP"
 
 # If image is in webp format, have to convert first
 if [[ "${EXT,,}" == "${WEBP_EXT,,}" ]]; then # https://stackoverflow.com/a/27679748
-	${BASH_ALIASES[convert_webp]} "${FILE_PATH}" # https://askubuntu.com/a/631108
+	# source "$(realpath ~/.bash_aliases)"
+	# ${BASH_ALIASES[convert_webp]} "${FILE_PATH}" # https://askubuntu.com/a/631108
+	${SCRIPT_DIR}/convert_webp "${FILE_PATH}"
 	CONVERT_RETURN=$?
 	if [[ ${CONVERT_RETURN} -ne 0 ]]; then
 		printf "\nCall to convert_webp failed.\n"
