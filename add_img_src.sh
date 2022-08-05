@@ -3,7 +3,6 @@
 # pass img path as first arg
 # pass img source URL as second arg
 
-# pull in bash aliases
 SCRIPT_DIR="$(realpath "$(dirname "${0}")")"
 FILE_PATH="$(realpath "${1}")"
 # https://code-maven.com/bash-absolute-path
@@ -33,6 +32,7 @@ WEBP_EXT="WEBP"
 
 # If image is in webp format, have to convert first
 if [[ "${EXT,,}" == "${WEBP_EXT,,}" ]]; then # https://stackoverflow.com/a/27679748
+	# pull in bash aliases
 	# source "$(realpath ~/.bash_aliases)"
 	# ${BASH_ALIASES[convert_webp]} "${FILE_PATH}" # https://askubuntu.com/a/631108
 	${SCRIPT_DIR}/convert_webp "${FILE_PATH}"
@@ -63,7 +63,10 @@ fi
 
 # Print current comment in case one already exists
 echo "Before update:"
+tput setaf 1
 exiftool -Comment "${FILEPATH_OUT}"
+tput setaf 7
+# https://stackoverflow.com/questions/2437976/get-color-output-in-bash
 
 # Write URL into the EXIF comment
 printf "\nAttempting to write EXIF comment..."
@@ -79,11 +82,12 @@ if [[ ${EXIF_RETURN} == 0 ]]; then
 	if [[ -f "${OG_BU_PATH}" ]]; 	then
 		# Prompt user to delete exiftool's _original auto-gen file
 		# xdg-open 2>/dev/null "${FILEPATH_OUT}"
-		printf "\nAccept new file and delete original (Y or N)?\n"
-		read -p ">" answer
-		if [ "${answer}" == "y" -o "${answer}" == "Y" ]; then
-			rm "${OG_BU_PATH}"
-		fi
+		# printf "\nAccept new file and delete original (Y or N)?\n"
+		# read -p ">" answer
+		# if [ "${answer}" == "y" -o "${answer}" == "Y" ]; then
+		# 	rm "${OG_BU_PATH}"
+		# fi
+		rm "${OG_BU_PATH}"
 	else
 		printf "FAIL\nCan't find '_original' file.\n"
 		exit 1
