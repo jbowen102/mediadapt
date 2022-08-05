@@ -72,7 +72,7 @@ def convert_webp(webp_path, delete_webp=False):
         return None
 
     print("Attempting to convert %s" % webp_name)
-    CompProc = subprocess.run(["%s/convert_webp" % SCRIPT_DIR, webp_path],
+    CompProc = subprocess.run(["%s/convert_webp.sh" % SCRIPT_DIR, webp_path],
                         stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     # bash output suppressed. No prompts in convert_webp.
     # converts file and puts output in original file's directory
@@ -100,7 +100,7 @@ def convert_webp(webp_path, delete_webp=False):
 def write_exif_comment(file_path, comment):
     """Wrapper for bash script write_exif_comment.
     Does not check for existence of a comment first."""
-    CompProc = subprocess.run(["%s/write_exif_comment" % SCRIPT_DIR, file_path,
+    CompProc = subprocess.run(["%s/write_exif_comment.sh" % SCRIPT_DIR, file_path,
                 str(comment)], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     if CompProc.returncode != 0:
         raise Exception("Call to write_exif_comment failed.")
@@ -136,7 +136,7 @@ def convert_gif_to_mp4(gif_path):
     """Wrapper for bash script trim_to_mp4 that also displays file sizes."""
 
     dir_name = os.path.dirname(gif_path)
-    CompProc = subprocess.run(["%s/trim_to_mp4" % SCRIPT_DIR, gif_path],
+    CompProc = subprocess.run(["%s/trim_to_mp4.sh" % SCRIPT_DIR, gif_path],
                                                     stderr=subprocess.STDOUT)
     # bash prompts passed to user - no stdout= param passed to subprocess.run() call.
 
@@ -172,9 +172,9 @@ def convert_all_webx(dir_name, webx_type=None, delete_webx=False):
     if not webx_type:
         # convert both types
         webx_ext = [".webp", ".webm"]
-    elif webx_type.lower() == "webp":
+    elif webx_type.lower() in ["webp", ".webp"]:
         webx_ext = [".webp"]
-    elif webx_type.lower() == "webm":
+    elif webx_type.lower() in ["webm", ".webm"]:
         webx_ext = [".webm"]
     else:
         raise Exception("Unrecognized webx type. Recognized types: webp, webm")
@@ -197,11 +197,11 @@ def convert_all_webx(dir_name, webx_type=None, delete_webx=False):
             else:
                 print("Converting: %s" % file)
                 if file_ext == ".webp":
-                    CompProc = subprocess.run(["%s/convert_webp" % SCRIPT_DIR, og_path],
+                    CompProc = subprocess.run(["%s/convert_webp.sh" % SCRIPT_DIR, og_path],
                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
                     # bash output suppressed. No prompts in convert_webp.
                 elif file_ext == ".webm":
-                    CompProc = subprocess.run(["%s/trim_to_mp4" % SCRIPT_DIR, og_path],
+                    CompProc = subprocess.run(["%s/trim_to_mp4.sh" % SCRIPT_DIR, og_path],
                                                     stderr=subprocess.STDOUT)
                     # bash prompts passed to user - no stdout= param passed to subprocess.run() call.
 
