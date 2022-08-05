@@ -100,8 +100,8 @@ def convert_webp(webp_path, delete_webp=False):
 def write_exif_comment(file_path, comment):
     """Wrapper for bash script write_exif_comment.
     Does not check for existence of a comment first."""
-    CompProc = subprocess.run(["%s/write_exif_comment" % SCRIPT_DIR, file_path, str(comment)],
-                            stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    CompProc = subprocess.run(["%s/write_exif_comment" % SCRIPT_DIR, file_path,
+                str(comment)], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     if CompProc.returncode != 0:
         raise Exception("Call to write_exif_comment failed.")
 
