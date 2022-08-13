@@ -1,6 +1,7 @@
 #!/bin/bash
 
 DIR_PATH="$(realpath "${1}")"
+SCRIPT_DIR="$(realpath "$(dirname "${0}")")"
 
 
 if [[ -d "${DIR_PATH}" ]]; then
@@ -22,7 +23,7 @@ for file in "${DIR_PATH}"/*; do
         :
     else
         printf "\n$file\n"
-        ./add_img_src.sh "$file" "${2}"
+        ${SCRIPT_DIR}/add_img_src.sh "$file" "${2}"
     fi
 done
 # https://askubuntu.com/questions/315335/bash-command-for-each-file-in-a-folder
