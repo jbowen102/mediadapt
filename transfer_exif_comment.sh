@@ -13,12 +13,13 @@ if [[ -e "${FILE_PATH_1}" ]]; then
 	if [[ -d "${FILE_PATH_1}" ]]; then
 	  echo "Input path ${1} not valid. Must be file, not directory." >&2
 	  exit 2
+	fi
 else
   echo "Input file ${1} cannot be found." >&2
   exit 2
 fi
 if [[ -e "${FILE_PATH_2}" ]]; then
-	elif [[ -d "${FILE_PATH_2}" ]]; then
+	if [[ -d "${FILE_PATH_2}" ]]; then
 		echo "Input path ${2} not valid. Must be file, not directory." >&2
 		exit 2
 	fi

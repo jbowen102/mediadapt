@@ -1,5 +1,6 @@
 #!/bin/bash
 
+source ~/.bash_aliases
 
 if [ $# -ne 2 ]; then
   echo "Expected two arguments - filename and comment to add" >&2
@@ -24,7 +25,7 @@ fi
 
 # Does not check for existence of a comment first
 printf "\nAttempting to write EXIF comment..."
-exiftool -Comment="${COMMENT}" "${FILE_PATH}" &> /dev/null
+${BASH_ALIASES[exiftool]} -Comment="${COMMENT}" "${FILE_PATH}" &> /dev/null
 EXIF_RETURN=$?
 OG_BU_PATH="${FILE_PATH}_original"
 

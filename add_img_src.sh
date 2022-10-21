@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source ~/.bash_aliases
+
 # pass img path as first arg
 # pass img source URL as second arg
 
@@ -64,19 +66,19 @@ fi
 # Print current comment in case one already exists
 echo "Before update:"
 tput setaf 1
-exiftool -Comment "${FILEPATH_OUT}"
+${BASH_ALIASES[exiftool]} -Comment "${FILEPATH_OUT}"
 tput setaf 7
 # https://stackoverflow.com/questions/2437976/get-color-output-in-bash
 
 # Write URL into the EXIF comment
 printf "\nAttempting to write EXIF comment..."
-exiftool -Comment="Source: ${2}" "${FILEPATH_OUT}"
+${BASH_ALIASES[exiftool]} -Comment="Source: ${2}" "${FILEPATH_OUT}"
 
 EXIF_RETURN=$?
 if [[ ${EXIF_RETURN} == 0 ]]; then
 	printf "SUCCESS\n"
 	# Print new comment to confirm it was stored correctly.
-	exiftool -Comment "${FILEPATH_OUT}"
+	${BASH_ALIASES[exiftool]} -Comment "${FILEPATH_OUT}"
 
 	OG_BU_PATH="${FILEPATH_OUT}_original"
 	if [[ -f "${OG_BU_PATH}" ]]; 	then
