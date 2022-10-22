@@ -96,7 +96,7 @@ if [[ $# == 1 ]]; then # one arg
     fi
 
     printf "\nAttempting to convert/trim to gif format..."
-    "${SCRIPT_DIR}"/convert_vid_to_gif "${TEMP_PATH}" &> /dev/null
+    "${SCRIPT_DIR}"/convert_vid_to_gif.sh "${TEMP_PATH}" &> /dev/null
     GIF_CONVERT_RETURN=$? # gets return value of last command executed.
     if [ ${GIF_CONVERT_RETURN} == 0 ]; then
       printf "SUCCESS\nAttempting to create patrol-cycle gif..."
@@ -121,7 +121,7 @@ elif [[ $# == 2 ]]; then # two args
     fi
 
     printf "\nAttempting to trim..."
-    "${SCRIPT_DIR}"/trim_only "${TEMP_PATH}" ${2} &> /dev/null
+    "${SCRIPT_DIR}"/trim_only.sh "${TEMP_PATH}" ${2} &> /dev/null
     TRIM_RETURN=$? # gets return value of last command executed.
     if [ ${TRIM_RETURN} == 0 ]; then
       printf "SUCCESS\nAttempting to create patrol-cycle gif..."
@@ -140,7 +140,7 @@ elif [[ $# == 2 ]]; then # two args
     fi
 
     printf "\nAttempting to convert/trim to gif format..."
-    "${SCRIPT_DIR}"/convert_vid_to_gif "${TEMP_PATH}" ${2} &> /dev/null
+    "${SCRIPT_DIR}"/convert_vid_to_gif.sh "${TEMP_PATH}" ${2} &> /dev/null
     GIF_CONVERT_RETURN=$? # gets return value of last command executed.
     if [ ${GIF_CONVERT_RETURN} == 0 ]; then
       printf "SUCCESS\nAttempting to create patrol-cycle gif..."
@@ -162,7 +162,7 @@ elif [[ $# == 3 ]]; then # three args
     fi
 
     printf "\nAttempting to trim..."
-    "${SCRIPT_DIR}"/trim_only "${TEMP_PATH}" ${2} ${3} &> /dev/null
+    "${SCRIPT_DIR}"/trim_only.sh "${TEMP_PATH}" ${2} ${3} &> /dev/null
     TRIM_RETURN=$? # gets return value of last command executed.
     if [ ${TRIM_RETURN} == 0 ]; then
       printf "SUCCESS\nAttempting to create patrol-cycle gif..."
@@ -182,7 +182,7 @@ elif [[ $# == 3 ]]; then # three args
 
     # trim and convert to gif at once
     printf "\nAttempting to convert/trim to gif format..."
-    "${SCRIPT_DIR}"/convert_vid_to_gif "${TEMP_PATH}" ${2} ${3} &> /dev/null
+    "${SCRIPT_DIR}"/convert_vid_to_gif.sh "${TEMP_PATH}" ${2} ${3} &> /dev/null
     GIF_CONVERT_RETURN=$? # gets return value of last command executed.
     if [ ${GIF_CONVERT_RETURN} == 0 ]; then
       printf "SUCCESS\nAttempting to create patrol-cycle gif..."
@@ -201,7 +201,7 @@ fi
 PATROL_CYC_RETURN=$? # gets return value of last command executed.
 if [ ${PATROL_CYC_RETURN} == 0 ]; then
   # transcribe EXIF comment, if present
-  "${SCRIPT_DIR}"/transfer_exif_comment "${FILE_PATH}" "${FILEPATH_OUT}" &> /dev/null
+  "${SCRIPT_DIR}"/transfer_exif_comment.sh "${FILE_PATH}" "${FILEPATH_OUT}" &> /dev/null
   COMMENT_RETURN=$? # gets return value of last command executed.
   if [ ${COMMENT_RETURN} == 0 ]; then
     printf "SUCCESS\n"

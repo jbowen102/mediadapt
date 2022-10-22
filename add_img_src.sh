@@ -37,7 +37,7 @@ if [[ "${EXT,,}" == "${WEBP_EXT,,}" ]]; then # https://stackoverflow.com/a/27679
 	# pull in bash aliases
 	# source "$(realpath ~/.bash_aliases)"
 	# ${BASH_ALIASES[convert_webp]} "${FILE_PATH}" # https://askubuntu.com/a/631108
-	${SCRIPT_DIR}/convert_webp "${FILE_PATH}"
+	${SCRIPT_DIR}/convert_webp.sh "${FILE_PATH}"
 	CONVERT_RETURN=$?
 	if [[ ${CONVERT_RETURN} -ne 0 ]]; then
 		printf "\nCall to convert_webp failed.\n"

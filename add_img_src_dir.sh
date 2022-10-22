@@ -17,7 +17,6 @@ elif [[ -e "${DIR_PATH}" ]]; then
 fi
 
 
-
 for file in "${DIR_PATH}"/*; do
     if [[ -d "$file" ]]; then
         :
