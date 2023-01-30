@@ -2,7 +2,7 @@
 
 
 # Read in WEBP2GIF_DIR variable
-source "$(realpath "$(dirname "${0}")")/dir_names.sh" # brings in WEBP2GIF_DIR
+# source "$(realpath "$(dirname "${0}")")/dir_names.sh" # brings in WEBP2GIF_DIR 	# WSL tweak
 # https://stackoverflow.com/questions/59895/how-can-i-get-the-source-directory-of-a-bash-script-from-within-the-script-itsel
 
 if [[ $# -ne 1 ]]; then
@@ -53,20 +53,20 @@ fi
 
 
 # Try using webp2gif first. Will fail if static img
-cp "${FILE_PATH}" "${WEBP2GIF_DIR}"
-cd "${WEBP2GIF_DIR}"
-printf "\nAttempting to convert to animated gif..."
-./webp2gif "${FILENAME}" "${FILENAME_GIF}" &> /dev/null
+# cp "${FILE_PATH}" "${WEBP2GIF_DIR}"						# WSL tweak
+# cd "${WEBP2GIF_DIR}" 								# WSL tweak
+# printf "\nAttempting to convert to animated gif..." 				# WSL tweak
+# ./webp2gif "${FILENAME}" "${FILENAME_GIF}" &> /dev/null 			# WSL tweak
 # https://stackoverflow.com/questions/617182/how-can-i-suppress-all-output-from-a-command-using-bash
-WEBP2GIF_RETURN=$? # gets return value of last command executed.
+# WEBP2GIF_RETURN=$? # gets return value of last command executed.		# WSL tweak
 
 # If webp2gif conversion failed, assume it's a static image.
-if [ ${WEBP2GIF_RETURN} == 0 ]; then
-  printf "SUCCESS\n"
-  mv "${FILENAME_GIF}" "${FILE_DIR_OG}" # overwrites any existing file w/ same name and ext.
-else
+# if [ ${WEBP2GIF_RETURN} == 0 ]; then						# WSL tweak
+#  printf "SUCCESS\n" 								# WSL tweak
+#  mv "${FILENAME_GIF}" "${FILE_DIR_OG}" # overwrites any existing file w/ same name and ext.  # WSL tweak
+# else										# WSL tweak
   NEW_EXT="jpg"
-  printf "FAIL\nAttempting to convert as static img..."
+  printf "Attempting to convert as static img..."				# WSL tweak
   FILEPATH_JPG="${FILEPATH_NO_EXT}.${NEW_EXT}"
   convert "${FILE_PATH}" "${FILEPATH_JPG}" &> /dev/null
   CONVERT_RETURN=$? # gets return value of last command executed.
@@ -76,11 +76,11 @@ else
     printf "Static conversion failed too!\n"
     exit 1
   fi
-fi
+# fi										# WSL tweak
 
 # Both cases fall through to clean up wep2gif dir.
-rm "${FILENAME}"
-cd "${STARTING_DIR}" # Back to original working dir.
+# rm "${FILENAME}" 								# WSL tweak
+# cd "${STARTING_DIR}" # Back to original working dir. 				# WSL tweak
 
 
 # Alternate method for differentiating animation from static:
