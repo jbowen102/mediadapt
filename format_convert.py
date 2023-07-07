@@ -22,7 +22,7 @@ def convert_heif(heif_path, delete_heif=False):
 
     # Can't let bash tool handle collisions because it can't prompt user when
     # its output is suppressed.
-    for ext_style in [".jpg", ".JPG", ".JPEG"]:
+    for ext_style in [".jpg", ".jpeg", ".JPG", ".JPEG"]:
         converted_filename = file_no_ext + ext_style
         converted_path = os.path.join(os.path.dirname(heif_path), converted_filename)
         if os.path.exists(converted_path):
@@ -66,7 +66,12 @@ def convert_webp(webp_path, delete_webp=False):
     wildcard_filename = file_no_ext + "." + "*"
     wildcard_path = os.path.join(os.path.dirname(webp_path), wildcard_filename)
     matches = glob.glob(wildcard_path)
-    if len(matches) > 1:
+    if matches == 2 and (matches[0].lower().endswith(".mp4") or \
+                         matches[1].lower().endswith(".mp4")):
+        # Eliminate nuisance triggers. .webp won't get converted to .mp4 but
+        # often accompany them.
+        pass
+    elif len(matches) > 1:
         print("Can't convert %s (File with same name and different "
                                         "extension exists here)" % webp_name)
         return None
@@ -191,10 +196,12 @@ def convert_all_webx(dir_name, webx_type=None, delete_webx=False):
             # Can't let bash script handle collisions because it
             # can't prompt user when its output is suppressed.
             matches = glob.glob(os.path.join(dir_name, wildcard_filename))
-            if len(matches) > 1:
-                print("Skipping: %s (File with same name and different "
-                                                "extension exists here)" % file)
-            else:
+            if len(matches) == 1 or (file_ext == ".webp" and len(matches) == 2 and \
+                                        (matches[0].lower().endswith(".mp4") or \
+                                        matches[1].lower().endswith(".mp4"))):
+                # Second conditional clause eliminates nuisance triggers.
+                # .webp won't get converted to .mp4 but often accompany them.
+
                 print("Converting: %s" % file)
                 if file_ext == ".webp":
                     CompProc = subprocess.run(["%s/convert_webp.sh" % SCRIPT_DIR, og_path],
@@ -232,6 +239,9 @@ def convert_all_webx(dir_name, webx_type=None, delete_webx=False):
 
                 else:
                     print("\tFAILED TO CONVERT")
+            elif len(matches) > 1:
+                print("Skipping: %s (File with same name and different "
+                                                "extension exists here)" % file)
 
     if webx_accum_size: # if no files found, will get div by zero
         print("\nOverall:\n\t%s  ->  %s  (%.2fx)" %
