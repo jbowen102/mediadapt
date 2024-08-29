@@ -19,9 +19,9 @@ FILE_DIR_OG="$(realpath "$(dirname "${FILE_PATH}")")"
 
 NEW_EXT="${EXT,,}" # convert to lowercase for caller functions to correctly predict naming # https://stackoverflow.com/a/2264537
 # put timestamps in output filename
-if [[ $# == 2 ]]; then
+if [ $# == 2 ]; then
   FILEPATH_OUT="${FILEPATH_NO_EXT}_${2}s-.${NEW_EXT}"
-elif [[ $# == 3 ]]; then
+elif [ $# == 3 ]; then
   FILEPATH_OUT="${FILEPATH_NO_EXT}_${2}-${3}s.${NEW_EXT}"
 else
   echo "Expected between 2 and 3 arguments (input file, start timestamp, and optional end timestamp)" >&2
@@ -30,8 +30,8 @@ else
 fi
 
 # Validate input path
-if [[ -e "${FILE_PATH}" ]]; then
-  if [[ -d "${FILE_PATH}" ]]; then
+if [ -e "${FILE_PATH}" ]; then
+  if [ -d "${FILE_PATH}" ]; then
 	  echo "Input path ${1} not valid. Must be file, not directory." >&2
 	  exit 2
 	fi
@@ -46,7 +46,7 @@ fi
 # ffmpeg has this check, but it requires the rest of the verbose output
 # (which is suppressed below)
 # Check for both resolvable path and broken symlink # https://unix.stackexchange.com/a/550837
-if [[ -e "${FILEPATH_OUT}" ]] || [[ -h "${FILEPATH_OUT}" ]]; then
+if [ -e "${FILEPATH_OUT}" ] || [ -h "${FILEPATH_OUT}" ]; then
   printf "\nTarget file $(basename "${FILEPATH_OUT}") exists. Overwrite? [Y/N]\n"
   read -p ">" answer
   if [ "${answer}" == "y" -o "${answer}" == "Y" ]; then

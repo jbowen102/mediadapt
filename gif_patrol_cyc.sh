@@ -5,7 +5,7 @@
 # Works w/ GIF, WEBM, MP4, MOV input formats (at least)
 # Start and end time can either be integers or in "00:00.00" format
 
-if [[ $# -ne 1 ]]; then
+if [ $# -ne 1 ]; then
 	echo "Expected one argument: gif/vid path." >&2
 	exit 2
   # https://stackoverflow.com/questions/18568706/check-number-of-arguments-passed-to-a-bash-script
@@ -27,8 +27,8 @@ FILE_DIR_OG="$(realpath "$(dirname "${FILE_PATH}")")"
 # https://linuxhandbook.com/dirname/
 
 # Validate input path
-if [[ -e "${FILE_PATH}" ]]; then
-  if [[ -d "${FILE_PATH}" ]]; then
+if [ -e "${FILE_PATH}" ]; then
+  if [ -d "${FILE_PATH}" ]; then
     echo "Input path ${1} not valid. Must be file, not directory." >&2
     exit 2
   fi
@@ -41,11 +41,11 @@ fi
 
 NEW_EXT="gif"
 # put timestamps in output filename
-if [[ $# == 1 ]]; then
+if [ $# == 1 ]; then
   FILEPATH_OUT="${FILEPATH_NO_EXT}_pcyc.${NEW_EXT}"
-elif [[ $# == 2 ]]; then
+elif [ $# == 2 ]; then
   FILEPATH_OUT="${FILEPATH_NO_EXT}_${2}s-_pcyc.${NEW_EXT}"
-elif [[ $# == 3 ]]; then
+elif [ $# == 3 ]; then
   FILEPATH_OUT="${FILEPATH_NO_EXT}_${2}-${3}s_pcyc.${NEW_EXT}"
 else
   echo "Expected between 1 and 3 arguments (input file and optional timestamps)" >&2
@@ -56,7 +56,7 @@ fi
 # ffmpeg has this check, but it requires the rest of the verbose output
 # (which is suppressed below)
 # Check for both resolvable path and broken symlink # https://unix.stackexchange.com/a/550837
-if [[ -e "${FILEPATH_OUT}" ]] || [[ -h "${FILEPATH_OUT}" ]]; then
+if [ -e "${FILEPATH_OUT}" ] || [ -h "${FILEPATH_OUT}" ]; then
   printf "\nTarget file $(basename "${FILEPATH_OUT}") exists. Overwrite? [Y/N]\n"
   read -p ">" answer
   if [ "${answer}" == "y" -o "${answer}" == "Y" ]; then
@@ -82,16 +82,16 @@ TEMP_PATH_NOEXT="${TEMP_FOLDER}/${FILENAME_NO_EXT}"
 
 # Collisions in temp files not handled
 
-if [[ $# == 1 ]]; then # one arg
+if [ $# == 1 ]; then # one arg
   # If not already a gif, convert to gif first. Case-insensitive comparison:
-  if [[ "${EXT,,}" == "${NEW_EXT,,}" ]]; then # https://stackoverflow.com/a/27679748
+  if [ "${EXT,,}" == "${NEW_EXT,,}" ]; then # https://stackoverflow.com/a/27679748
     printf "\nAttempting to create patrol-cycle gif..."
 
     convert "${FILE_PATH}" -coalesce -duplicate 1,-2-1 -quiet \
     -layers OptimizePlus -loop 0 "${FILEPATH_OUT}" &> /dev/null
   else
     INTER_GIF_PATH="${TEMP_PATH%.*}.${NEW_EXT}"
-    if [[ -e "${INTER_GIF_PATH}" ]]; then
+    if [ -e "${INTER_GIF_PATH}" ]; then
       rm "${INTER_GIF_PATH}"
     fi
 
@@ -112,11 +112,11 @@ if [[ $# == 1 ]]; then # one arg
     fi
   fi
 
-elif [[ $# == 2 ]]; then # two args
+elif [ $# == 2 ]; then # two args
   # If not already a gif, convert to gif first. Case-insensitive comparison:
-  if [[ "${EXT,,}" == "${NEW_EXT,,}" ]]; then # https://stackoverflow.com/a/27679748
+  if [ "${EXT,,}" == "${NEW_EXT,,}" ]; then # https://stackoverflow.com/a/27679748
     INTER_GIF_PATH="${TEMP_PATH_NOEXT}_${2}s-.gif"
-    if [[ -e "${INTER_GIF_PATH}" ]]; then
+    if [ -e "${INTER_GIF_PATH}" ]; then
       rm "${INTER_GIF_PATH}"
     fi
 
@@ -135,7 +135,7 @@ elif [[ $# == 2 ]]; then # two args
     fi
   else
     INTER_GIF_PATH="${TEMP_PATH_NOEXT}_${2}s-.gif"
-    if [[ -e "${INTER_GIF_PATH}" ]]; then
+    if [ -e "${INTER_GIF_PATH}" ]; then
       rm "${INTER_GIF_PATH}"
     fi
 
@@ -153,11 +153,11 @@ elif [[ $# == 2 ]]; then # two args
       exit 1
     fi
   fi
-elif [[ $# == 3 ]]; then # three args
+elif [ $# == 3 ]; then # three args
   # If not already a gif, convert to gif first. Case-insensitive comparison:
-  if [[ "${EXT,,}" == "${NEW_EXT,,}" ]]; then # https://stackoverflow.com/a/27679748
+  if [ "${EXT,,}" == "${NEW_EXT,,}" ]; then # https://stackoverflow.com/a/27679748
     INTER_GIF_PATH="${TEMP_PATH_NOEXT}_${2}-${3}s.gif"
-    if [[ -e "${INTER_GIF_PATH}" ]]; then
+    if [ -e "${INTER_GIF_PATH}" ]; then
       rm "${INTER_GIF_PATH}"
     fi
 
@@ -176,7 +176,7 @@ elif [[ $# == 3 ]]; then # three args
     fi
   else
     INTER_GIF_PATH="${TEMP_PATH_NOEXT}_${2}-${3}s.gif"
-    if [[ -e "${INTER_GIF_PATH}" ]]; then
+    if [ -e "${INTER_GIF_PATH}" ]; then
       rm "${INTER_GIF_PATH}"
     fi
 

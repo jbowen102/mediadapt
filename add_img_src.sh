@@ -7,7 +7,7 @@ SCRIPT_DIR="$(realpath "$(dirname "${0}")")"
 FILE_PATH="$(realpath "${1}")"
 # https://code-maven.com/bash-absolute-path
 
-if [[ $# -ne 2 ]]; then
+if [ $# -ne 2 ]; then
 	echo "Need to pass in two arguments: img path and img source URL to embed." >&2
 	exit 2
   # https://stackoverflow.com/questions/18568706/check-number-of-arguments-passed-to-a-bash-script
@@ -16,8 +16,8 @@ fi
 
 # Validate input path
 FILE_PATH="$(realpath "${1}")"
-if [[ -e "${FILE_PATH}" ]]; then
-  if [[ -d "${FILE_PATH}" ]]; then
+if [ -e "${FILE_PATH}" ]; then
+  if [ -d "${FILE_PATH}" ]; then
 	  echo "Input path ${1} not valid. Must be file, not directory." >&2
 	  exit 2
 	fi
@@ -31,13 +31,13 @@ FILENAME=$(basename "${FILE_PATH}") # includes extension
 WEBP_EXT="WEBP"
 
 # If image is in webp format, have to convert first
-if [[ "${EXT,,}" == "${WEBP_EXT,,}" ]]; then # https://stackoverflow.com/a/27679748
+if [ "${EXT,,}" == "${WEBP_EXT,,}" ]; then # https://stackoverflow.com/a/27679748
 	# pull in bash aliases
 	# source "$(realpath ~/.bash_aliases)"
 	# ${BASH_ALIASES[convert_webp]} "${FILE_PATH}" # https://askubuntu.com/a/631108
 	${SCRIPT_DIR}/convert_webp.sh "${FILE_PATH}"
 	CONVERT_RETURN=$?
-	if [[ ${CONVERT_RETURN} -ne 0 ]]; then
+	if [ ${CONVERT_RETURN} -ne 0 ]; then
 		printf "\nCall to convert_webp failed.\n"
 		exit 1
 	fi
@@ -45,13 +45,13 @@ if [[ "${EXT,,}" == "${WEBP_EXT,,}" ]]; then # https://stackoverflow.com/a/27679
 	# Don't know if it will be a static or animated image yet.
 	FILEPATH_GIF="${FILEPATH_NO_EXT}.gif"
 	FILEPATH_JPG="${FILEPATH_NO_EXT}.jpg"
-	if [[ -e "${FILEPATH_GIF}" ]] && [[ -e "${FILEPATH_JPG}" ]]; then
+	if [ -e "${FILEPATH_GIF}" ] && [ -e "${FILEPATH_JPG}" ]; then
 		# can't ID which one is the new one
 		printf "\nBoth .gif and .jpg versions of ${FILENAME} input file exist in target dir.\n"
 		exit 1
-	elif [[ -e "${FILEPATH_GIF}" ]]; then
+	elif [ -e "${FILEPATH_GIF}" ]; then
 		FILEPATH_OUT="${FILEPATH_GIF}"
-	elif [[ -e "${FILEPATH_JPG}" ]]; then
+	elif [ -e "${FILEPATH_JPG}" ]; then
 		FILEPATH_OUT="${FILEPATH_JPG}"
 	else
 		printf "\nCan't find either .gif and .jpg version of ${FILENAME} input file in target dir.\n"
@@ -73,13 +73,13 @@ printf "\nAttempting to write EXIF comment..."
 exiftool -Comment="Source: ${2}" "${FILEPATH_OUT}"
 
 EXIF_RETURN=$?
-if [[ ${EXIF_RETURN} == 0 ]]; then
+if [ ${EXIF_RETURN} == 0 ]; then
 	printf "SUCCESS\n"
 	# Print new comment to confirm it was stored correctly.
 	exiftool -Comment "${FILEPATH_OUT}"
 
 	OG_BU_PATH="${FILEPATH_OUT}_original"
-	if [[ -f "${OG_BU_PATH}" ]]; 	then
+	if [ -f "${OG_BU_PATH}" ]; 	then
 		# Prompt user to delete exiftool's _original auto-gen file
 		# xdg-open 2>/dev/null "${FILEPATH_OUT}"
 		# printf "\nAccept new file and delete original (Y or N)?\n"

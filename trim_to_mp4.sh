@@ -20,11 +20,11 @@ FILE_DIR_OG="$(realpath "$(dirname "${FILE_PATH}")")"
 
 NEW_EXT="mp4"
 # put timestamps in output filename
-if [[ $# == 1 ]]; then
+if [ $# == 1 ]; then
   FILEPATH_OUT="${FILEPATH_NO_EXT}.${NEW_EXT}"
-elif [[ $# == 2 ]]; then
+elif [ $# == 2 ]; then
   FILEPATH_OUT="${FILEPATH_NO_EXT}_${2}s-.${NEW_EXT}"
-elif [[ $# == 3 ]]; then
+elif [ $# == 3 ]; then
   FILEPATH_OUT="${FILEPATH_NO_EXT}_${2}-${3}s.${NEW_EXT}"
 else
   echo "Expected between 1 and 3 arguments (input file and optional timestamps)" >&2
@@ -33,8 +33,8 @@ else
 fi
 
 # Validate input path
-if [[ -e "${FILE_PATH}" ]]; then
-  if [[ -d "${FILE_PATH}" ]]; then
+if [ -e "${FILE_PATH}" ]; then
+  if [ -d "${FILE_PATH}" ]; then
 	  echo "Input path ${1} not valid. Must be file, not directory." >&2
 	  exit 2
 	fi
@@ -49,11 +49,11 @@ fi
 # ffmpeg has this check, but it requires the rest of the verbose output
 # (which is suppressed below)
 # Check for both resolvable path and broken symlink # https://unix.stackexchange.com/a/550837
-if [[ ${FILE_PATH} == ${FILEPATH_OUT} ]]; then # trivial case of mp4 input file w/ no timestamps passed.
+if [ ${FILE_PATH} == ${FILEPATH_OUT} ]; then # trivial case of mp4 input file w/ no timestamps passed.
   echo "\nOutput file cannot have same name as input file." >&2
   exit 2
   # https://stackoverflow.com/questions/18568706/check-number-of-arguments-passed-to-a-bash-script
-elif [[ -e "${FILEPATH_OUT}" ]] || [[ -h "${FILEPATH_OUT}" ]]; then
+elif [ -e "${FILEPATH_OUT}" ] || [ -h "${FILEPATH_OUT}" ]; then
   printf "\nTarget file $(basename ${FILEPATH_OUT})  exists. Overwrite? [Y/N]\n"
   read -p ">" answer
   if [ "${answer}" == "y" -o "${answer}" == "Y" ]; then
@@ -66,15 +66,15 @@ fi
 
 
 printf "\nAttempting to trim/convert..."
-if [[ $# == 1 ]]; then # one arg
+if [ $# == 1 ]; then # one arg
   # The utility of this case is a simple format conversion to mp4
   ffmpeg -i "${FILE_PATH}" -movflags +faststart \
             "${FILEPATH_OUT}" &> /dev/null
   # https://stackoverflow.com/questions/617182/how-can-i-suppress-all-output-from-a-command-using-bash
-elif [[ $# == 2 ]]; then # two args
+elif [ $# == 2 ]; then # two args
   ffmpeg -ss ${2} -i "${FILE_PATH}" -movflags +faststart \
                      "${FILEPATH_OUT}" &> /dev/null
-elif [[ $# == 3 ]]; then # three args
+elif [ $# == 3 ]; then # three args
   ffmpeg -ss ${2} -to ${3} -i "${FILE_PATH}" -movflags +faststart \
                               "${FILEPATH_OUT}" &> /dev/null
 fi

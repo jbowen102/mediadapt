@@ -4,7 +4,7 @@
 # Works w/ WEBM, MP4, MOV, and GIF input formats (at least)
 # Start and end time can either be integers or in "00:00.00" format
 
-if [[ $# -ne 1 ]]; then
+if [ $# -ne 1 ]; then
 	echo "Expected one argument: vid path." >&2
 	exit 2
   # https://stackoverflow.com/questions/18568706/check-number-of-arguments-passed-to-a-bash-script
@@ -25,8 +25,8 @@ FILE_DIR_OG="$(realpath "$(dirname "${FILE_PATH}")")"
 
 
 # Validate input path
-if [[ -e "${FILE_PATH}" ]]; then
-  if [[ -d "${FILE_PATH}" ]]; then
+if [ -e "${FILE_PATH}" ]; then
+  if [ -d "${FILE_PATH}" ]; then
     echo "Input path ${1} not valid. Must be file, not directory." >&2
     exit 2
   fi
@@ -52,16 +52,16 @@ FILEPATH_OUT="${OUTPUT_FOLDER}/${FILENAME_NO_EXT::20}_%05d.jpg"
 # Output-file collisions not handled
 
 printf "\nAttempting to extract video frames..."
-if [[ $# == 1 ]]; then # one arg
+if [ $# == 1 ]; then # one arg
   # Extract frames from entire vid
   ffmpeg -i "${FILE_PATH}" -qscale:v 2 "${FILEPATH_OUT}" &> /dev/null
   # https://stackoverflow.com/questions/10957412/fastest-way-to-extract-frames-using-ffmpeg
   # https://stackoverflow.com/questions/10225403/how-can-i-extract-a-good-quality-jpeg-image-from-a-video-file-with-ffmpeg/10234065#10234065
   # https://stackoverflow.com/questions/617182/how-can-i-suppress-all-output-from-a-command-using-bash
-elif [[ $# == 2 ]]; then # two args
+elif [ $# == 2 ]; then # two args
   # Extract all frames from given timestamp to end.
   ffmpeg -ss ${2} -i "${FILE_PATH}" -qscale:v 2 "${FILEPATH_OUT}" &> /dev/null
-elif [[ $# == 3 ]]; then # three args
+elif [ $# == 3 ]; then # three args
   ffmpeg -i "${FILE_PATH}" -qscale:v 2  -ss ${2} -to ${3} "${FILEPATH_OUT}" &> /dev/null
 else
   echo "Expected between 1 and 3 arguments (input file and optional timestamps)" >&2

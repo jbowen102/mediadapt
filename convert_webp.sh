@@ -5,7 +5,7 @@
 source "$(realpath "$(dirname "${0}")")/dir_names.sh" # brings in WEBP2GIF_DIR
 # https://stackoverflow.com/questions/59895/how-can-i-get-the-source-directory-of-a-bash-script-from-within-the-script-itsel
 
-if [[ $# -ne 1 ]]; then
+if [ $# -ne 1 ]; then
 	echo "Expected one argument: img path." >&2
 	exit 2
   # https://stackoverflow.com/questions/18568706/check-number-of-arguments-passed-to-a-bash-script
@@ -16,8 +16,8 @@ FILE_PATH="$(realpath "${1}")"
 # https://code-maven.com/bash-absolute-path
 
 # Validate input path
-if [[ -e "${FILE_PATH}" ]]; then
-  if [[ -d "${FILE_PATH}" ]]; then
+if [ -e "${FILE_PATH}" ]; then
+  if [ -d "${FILE_PATH}" ]; then
     echo "Input path ${1} not valid. Must be file, not directory." >&2
     exit 2
   fi
@@ -40,7 +40,7 @@ FILENAME_GIF="${FILENAME_NO_EXT}.gif"
 # Check for existence of output file before attempting conversion.
 # Check for both resolvable path and broken symlink # https://unix.stackexchange.com/a/550837
 FILEPATH_GIF_TARGET="${FILE_DIR_OG}/${FILENAME_GIF}"
-if [[ -e "${FILEPATH_GIF_TARGET}" ]] || [[ -h "${FILEPATH_GIF_TARGET}" ]]; then
+if [ -e "${FILEPATH_GIF_TARGET}" ] || [ -h "${FILEPATH_GIF_TARGET}" ]; then
   printf "\nTarget file $(basename ${FILEPATH_GIF_TARGET}) exists. Overwrite? [Y/N]\n"
   read -p ">" answer
   if [ "${answer}" == "y" -o "${answer}" == "Y" ];   then

@@ -11,8 +11,8 @@ fi
 FILE_PATH="$(realpath "${1}")"
 COMMENT="${2}"
 # Validate input path
-if [[ -e "${FILE_PATH}" ]]; then
-  if [[ -d "${FILE_PATH}" ]]; then
+if [ -e "${FILE_PATH}" ]; then
+  if [ -d "${FILE_PATH}" ]; then
 	  echo "Input path ${1} not valid. Must be file, not directory." >&2
 	  exit 2
 	fi
@@ -28,8 +28,8 @@ exiftool -Comment="${COMMENT}" "${FILE_PATH}" &> /dev/null
 EXIF_RETURN=$?
 OG_BU_PATH="${FILE_PATH}_original"
 
-if [[ ${EXIF_RETURN} == 0 ]]; then
-	if [[ -f "${OG_BU_PATH}" ]]; then
+if [ ${EXIF_RETURN} == 0 ]; then
+	if [ -f "${OG_BU_PATH}" ]; then
 		rm "${OG_BU_PATH}"
 		printf "SUCCESS\n"
 	else
