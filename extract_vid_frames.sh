@@ -37,9 +37,7 @@ fi
 
 # Create "frames" directory to store output
 OUTPUT_FOLDER="${FILE_DIR_OG}/frames/"
-if [ -d "${OUTPUT_FOLDER}" ]; then
-	: # do nothing
-else
+if [ ! -d "${OUTPUT_FOLDER}" ]; then
 	mkdir "${OUTPUT_FOLDER}"
 fi
 

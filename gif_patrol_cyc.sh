@@ -69,9 +69,7 @@ fi
 
 # Create temp directory to store output
 TEMP_FOLDER="${FILE_DIR_OG}/gif_temp/"
-if [ -d "${TEMP_FOLDER}" ]; then
-	: # do nothing
-else
+if [ ! -d "${TEMP_FOLDER}" ]; then
 	mkdir "${TEMP_FOLDER}"
 fi
 

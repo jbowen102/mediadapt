@@ -5,9 +5,7 @@ SCRIPT_DIR="$(realpath "$(dirname "${0}")")"
 
 
 if [ -d "${DIR_PATH}" ]; then
-    if [ -e "${DIR_PATH}" ]; then
-        :
-    else
+    if [ ! -e "${DIR_PATH}" ]; then
         echo "Input path ${1} not valid." >&2
         exit 2
     fi
@@ -18,9 +16,7 @@ fi
 
 
 for file in "${DIR_PATH}"/*; do
-    if [ -d "$file" ]; then
-        :
-    else
+    if [ ! -d "$file" ]; then
         printf "\n$file\n"
         ${SCRIPT_DIR}/add_img_src.sh "$file" "${2}"
     fi
