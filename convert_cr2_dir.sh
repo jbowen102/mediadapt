@@ -21,10 +21,8 @@ elif [ -e "${DIR_PATH}" ]; then
     exit 2
 fi
 
-for i in *.CR2; do dcraw -c $i | ppmtojpeg > $i.jpg; echo $i done; done
 
-
-for file in "${DIR_PATH}"/*.CR2; do
+for file in "$DIR_PATH"/*; do
     if [ ! -d "$file" ]; then
         ${SCRIPT_DIR}/convert_cr2.sh "$file"
     fi

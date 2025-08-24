@@ -38,14 +38,16 @@ fi
 # Check for existence of output file before attempting conversion.
 # Check for both resolvable path and broken symlink # https://unix.stackexchange.com/a/550837
 if [ -e "${FILEPATH_OUT}" ] || [ -h "${FILEPATH_OUT}" ]; then
-  printf "\nTarget file $(basename ${FILEPATH_OUT}) exists. Overwrite? [Y/N]\n"
-  read -p ">" answer
-  if [ "${answer}" == "y" -o "${answer}" == "Y" ];   then
-    rm "${FILEPATH_OUT}"
-  else
-    printf "Exiting\n"
-    exit 1
-  fi
+  printf "Target file $(basename ${FILEPATH_OUT}) exists. Skipped\n"
+  exit 0
+  # printf "\nTarget file $(basename ${FILEPATH_OUT}) exists. Overwrite? [Y/N]\n"
+  # read -p ">" answer
+  # if [ "${answer}" == "y" -o "${answer}" == "Y" ];   then
+  #   rm "${FILEPATH_OUT}"
+  # else
+  #   printf "Exiting\n"
+  #   exit 1
+  # fi
 fi
 
 printf "Attempting to convert ${FILENAME} to ${NEW_EXT}..."
