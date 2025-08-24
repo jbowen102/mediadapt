@@ -197,10 +197,12 @@ def convert_all_webx(dir_name, webx_type=None, delete_webx=False):
             # can't prompt user when its output is suppressed.
             matches = glob.glob(os.path.join(dir_name, wildcard_filename))
             if len(matches) == 1 or (file_ext == ".webp" and len(matches) == 2 and \
-                                        (matches[0].lower().endswith(".mp4") or \
-                                        matches[1].lower().endswith(".mp4"))):
+                                        (matches[0].lower().endswith(".mp3") or \
+                                         matches[1].lower().endswith(".mp3") or \
+                                         matches[0].lower().endswith(".mp4") or \
+                                         matches[1].lower().endswith(".mp4"))):
                 # Second conditional clause eliminates nuisance triggers.
-                # .webp won't get converted to .mp4 but often accompany them.
+                # .webp won't get converted to .mp3 or .mp4 but often accompany them.
 
                 print("Converting: %s" % file)
                 if file_ext == ".webp":
