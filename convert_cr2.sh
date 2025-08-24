@@ -25,9 +25,15 @@ else
 fi
 
 FILEPATH_NO_EXT="${FILE_PATH%.*}"
+EXT="${FILE_PATH##*.}"
 FILENAME=$(basename "${FILE_PATH}") # includes extension
 NEW_EXT="jpg"
 FILEPATH_OUT="${FILEPATH_NO_EXT}.${NEW_EXT}"
+
+if [ "${EXT}" != "CR2" ]; then
+  printf "${FILENAME} not a CR2 file. Left alone.\n"
+  exit 0
+fi
 
 # Check for existence of output file before attempting conversion.
 # Check for both resolvable path and broken symlink # https://unix.stackexchange.com/a/550837
@@ -42,7 +48,7 @@ if [ -e "${FILEPATH_OUT}" ] || [ -h "${FILEPATH_OUT}" ]; then
   fi
 fi
 
-printf "\nAttempting to convert ${FILENAME} to ${NEW_EXT}..."
+printf "Attempting to convert ${FILENAME} to ${NEW_EXT}..."
 dcraw -c "${FILE_PATH}" | ppmtojpeg > "${FILEPATH_OUT}"
 RC=$?
 if [ ${RC} == 0 ]; then
